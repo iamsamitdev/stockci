@@ -2,10 +2,11 @@
 
 class Frontend extends CI_Controller {
 
-    public function __contruct() {
+    public function __construct() {
         parent::__construct();
         // db connection
         // $this->load->database();
+        $this->load->library('session');
     }
 
     public function index() {
@@ -48,16 +49,29 @@ class Frontend extends CI_Controller {
             // echo "</pre>";
 
             // สร้าง session สำหรับเก็บข้อมูลของ user
-            $sess_array = array(
-                'id' => $result[0]->id,
-                'username' => $result[0]->username,
-                'email' => $result[0]->email,
-                'fullname' => $result[0]->fullname,
-                'mobile' => $result[0]->mobile,
-                'status' => $result[0]->status
-            );
+            // $sess_array = array(
+            //     'id' => $result[0]->id,
+            //     'username' => $result[0]->username,
+            //     'email' => $result[0]->email,
+            //     'fullname' => $result[0]->fullname,
+            //     'mobile' => $result[0]->mobile,
+            //     'status' => $result[0]->status
+            // );
+
+            foreach ($result as $row)
+            {
+                $sess_array = array(
+                    'id'       => $row->id,
+                    'username' => $row->username,
+                    'fullname' => $row->fullname,
+                    'email'    => $row->email,
+                    'mobile' => $row->mobile,
+                    'status'   => $row->status
+                );
+            }
 
             $this->session->set_userdata('logged_in', $sess_array);
+
 
             // สร้าง flashdata สำหรับเก็บข้อความแจ้งเตือน
             $this->session->set_flashdata('msg', '<div class="d-flex align-items-center">
